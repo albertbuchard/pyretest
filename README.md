@@ -96,7 +96,7 @@ print('Intermediate results df:', results.df)
 #### Use weighted versions
 
 To use the weighted versions of the previous functions, you need to provide a `weight_type` argument which can either be `"linear"` or `"quadratic"`. See [these slides](https://folk.ntnu.no/slyderse/Pres24Jan2014.pdf) for more details.
-You also need to provide a list of Questions, but the sampling probabilities do not matter.
+You also need to provide a list of Questions.
 
 For example:
 ```python
