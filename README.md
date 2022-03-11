@@ -102,14 +102,6 @@ For example:
 ```python
 # Assuming code from the previous examples
 
-# Only the question values are necessary
-questions = [
-            Question(["a", "b", "c", "d", "e"], []),
-            Question(["a", "b", "c", "d", "e"], []),
-            Question(["a", "b", "c", "d", "e"], []),
-            Question(["a", "b", "c", "d", "e"], []),
-        ]
-
 weight_type = "linear"
 k1_weighted = pooled_cohen_kappa(samples_a, samples_b, weight_type=weight_type, questions=questions)
 
