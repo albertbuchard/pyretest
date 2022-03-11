@@ -15,7 +15,7 @@ References:
 
 Install from github:
 ```
-pip install --upgrade https://github.com/albertbuchard/pyretest/tarball/master
+pip install pyretest
 ```
 
 ### Usage
@@ -145,4 +145,4 @@ Or set it only in the first call to `sample_questionnaire`.
 - Albert Buchard
 
 
-####MIT License
+#### MIT License
