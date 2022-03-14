@@ -46,7 +46,6 @@ def bootstrap_confidence_interval(questions, n, weight_type=None, n_bootstrap=10
 
 SSInfo = namedtuple("SSInfo", ["sample_size", "df"])
 
-
 def bootstrap_sample_size_cohen_kappa(questions, max_n, weight_type=None,
                                       start_n=10, n_step=10, reliability=0.1, n_bootstrap=1000,
                                       alpha=0.05, beta=0.8, seed=None):
@@ -70,8 +69,7 @@ def bootstrap_sample_size_cohen_kappa(questions, max_n, weight_type=None,
 
     :return: namedtuple("SSInfo", "sample_size df")
     """
-    from pyretest import sample_questionnaire
-    from pyretest import pooled_cohen_kappa
+    from pyretest import sample_questionnaire, make_reliable, pooled_cohen_kappa
 
     import random
     if seed is not None:
@@ -81,7 +79,7 @@ def bootstrap_sample_size_cohen_kappa(questions, max_n, weight_type=None,
     power_by_n = pd.DataFrame(columns=['n', 'power', 'upper_bound_ci', 'mean_kappa_h0', 'mean_kappa_h1'])
 
     # Compute the power to show a one sided difference of delta_kappa for different sample sizes with steps of n_step samples
-    n_range = range(n_step, max_n + 1, n_step)
+    n_range = range(start_n, max_n + 1, n_step)
     for n in tqdm(n_range, desc=f"Sample sizes from {start_n} to {max_n} with steps of {n_step}"):
         # Compute the cohen kappa for each bootstrap sample
         cohen_kappa_bootstrap = []
@@ -91,18 +89,18 @@ def bootstrap_sample_size_cohen_kappa(questions, max_n, weight_type=None,
             samples_b = sample_questionnaire(questions, n)
             cohen_kappa_bootstrap.append(
                 pooled_cohen_kappa(samples_a, samples_b, weight_type=weight_type, questions=questions))
-            samples_b[:int(n * reliability)] = samples_a[:int(n * reliability)]
+            # Set samples equal to each other to match reliability
+            sample_a_reliable, sample_b_reliable = make_reliable(samples_a, samples_b, reliability)
             cohen_kappa_bootstrap_reliable.append(
-                pooled_cohen_kappa(samples_a, samples_b, weight_type=weight_type, questions=questions))
+                pooled_cohen_kappa(sample_a_reliable, sample_b_reliable, weight_type=weight_type, questions=questions))
 
         # Compute the one sided confidence interval
         cohen_kappa_bootstrap = np.array(cohen_kappa_bootstrap)
         cohen_kappa_bootstrap_reliable = np.array(cohen_kappa_bootstrap_reliable)
         cohen_kappa_bootstrap.sort()
 
-        # Center the array
+        # Compute mean and confidence interval upperbound
         mean = np.mean(cohen_kappa_bootstrap)
-        cohen_kappa_bootstrap = cohen_kappa_bootstrap - mean
 
         # Compute the upper bound of the confidence interval
         upper_bound = cohen_kappa_bootstrap[int(n_bootstrap * (1 - alpha))]
