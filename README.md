@@ -13,7 +13,6 @@ References:
 
 ### Installation
 
-Install from github:
 ```
 pip install pyretest
 ```
@@ -40,7 +39,9 @@ questions = [
 samples_a = np.array(sample_questionnaire(questions, n=1000))
 samples_b = np.array(sample_questionnaire(questions, n=1000))
 
-# Set the reliability to 10%
+# Set the reliability to 10% 
+# You can also use the function 
+#   make_reliable(samples_a, samples_b, reliability=0.1)
 reliability = 0.1
 n_reliable = int(reliability * samples_a.shape[0])
 samples_a[:n_reliable] = samples_b[:n_reliable]

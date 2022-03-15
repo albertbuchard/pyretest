@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pyretest',
-    version='1.1',
+    version='1.3',
     packages=['pyretest', 'pyretest.sampler', 'pyretest.pooled_kappa'],
     url='https://github.com/albertbuchard/pyretest',
     license='MIT',
